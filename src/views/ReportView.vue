@@ -3,7 +3,7 @@
     <notifications width="100%" />
 
     <loading v-model:active="isLoading"  :is-full-page="true" />
-
+    <br>
     <h2 style="text-align: center;">Generador de reportes TK</h2>
 
     <div class="row mt-5">
@@ -31,7 +31,7 @@
     </div> 
 
 
-    <modal-component ref="ModalComponent" />
+    <modal-component ref="ModalComponent"  v-on:refresh-list="listReport"/>
   </div>
 
 </template>
@@ -63,11 +63,9 @@ import 'vue-loading-overlay/dist/vue-loading.css';
         let url = this.$uri+'/api/list-reports'
         this.axios.get(url)
         .then(response => {
-            console.log(response.data.response)
             this.listReports = response.data.response 
         })
         .catch(error => {
-          console.log(error)
         })
         .finally(() => {
             this.isLoading = false;

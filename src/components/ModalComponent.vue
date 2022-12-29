@@ -13,7 +13,7 @@
                             <div class="col-12">
                                 <div class="mb-3 text-start" >
                                     <label for="exampleFormControlInput1" class="form-label">Descripción del reporte</label>
-                                    <input type="text" class="form-control" v-model="input.title" placeholder="" required>
+                                    <input type="text" class="form-control" v-model="title" placeholder="" required>
                                     <small v-if="errorMessages.title != '' " v-text="errorMessages.title" class="text-danger"></small>
                                 </div>
                             </div>
@@ -22,20 +22,20 @@
                             <div class="col-6">
                                 <div class="mb-3  text-start">
                                     <label  class="form-label">Fecha inicio</label>
-                                    <input type="date" required class="form-control" v-model="input.start_date">
+                                    <input type="date" required class="form-control" v-model="start_date">
                                      <small v-if="errorMessages.start_date != '' " v-text="errorMessages.start_date" class="text-danger"></small>
                                 </div>
                             </div>
                             <div class="col-6">
                                 <div class="mb-3  text-start">
                                     <label class="form-label">Fecha Fin</label>
-                                    <input type="date" required class="form-control" v-model="input.end_date">
+                                    <input type="date" required class="form-control" v-model="end_date">
                                     <small v-if="errorMessages.end_date != '' " v-text="errorMessages.end_date" class="text-danger"></small>
                                 </div>
                             </div>
                         </div>
                         <div class="d-grid gap-2 col-6 mx-auto mt-3 mb-4">
-                            <button class=" btn btn-custom btn-warning shadow" type="submit">Generar reporte</button>
+                            <button :disabled="isDisabled==true" class=" btn btn-custom btn-warning shadow"  type="submit">Generar reporte</button>
                         </div>
                     </div>
                 </form>
@@ -59,22 +59,42 @@ export default {
         return {
             statusModal:false,
             isLoading: false,
-            input : {
-                title: null,
-                start_date: null,
-                end_date: null
-            },
+        
+            title: null,
+            start_date: null,
+            end_date: null,
+            
             errorMessages:{
                 title: null,
                 start_date: null,
                 end_date: null
-            }
+            },
+            isDisabled:true
         }
     },
     components:{
         Loading
     },
+    watch: {
+        title(newValue,oldValue){
+            this.enabledButton()
+        },
+        start_date(newValue,oldValue){
+            this.enabledButton()
+        },
+        end_date(newValue,oldValue){
+            this.enabledButton()
+        }
+    },
     methods: {
+        enabledButton(){
+            if(this.title =='' || this.start_date =='' || this.end_date || ''){
+                this.isDisabled = false
+            }
+            else{
+                this.isDisabled =true
+            }
+        },
         showModal(){
             this.statusModal = true;
         },
@@ -88,15 +108,19 @@ export default {
             this.isLoading= true
 
             let url = this.$uri+'/api/generate-report'
-            let data = this.input
+            let data =   {
+                title: this.title,
+                start_date: this.start_date,
+                end_date: this.end_date
+            };
         
             this.axios.post(url,data)
             .then(response => {
                 this.hideModal()
                 this.resetInputs()
-                this.$notify({ type: "info", title:"Mensaje", text: "El reporte se está generando." });
+                this.$notify({ type: "success", title:"Mensaje", text: "El reporte se está generando." });
+                this.$emit('refresh-list','');
             }).catch(error => {
-                
                 if(error.response.status == 422){
                     let errors = error.response.data.errors
                  
@@ -126,9 +150,9 @@ export default {
                 this.errorMessages[index] = ''
             }
 
-            this.input.title      = '',
-            this.input.start_date = '',
-            this.input.end_date   = ''
+            this.title      = '',
+            this.start_date = '',
+            this.end_date   = ''
           
         }
     },
