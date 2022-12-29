@@ -27,9 +27,7 @@
 
     <div style="text-align: center;">
       <button class="btn btn-custom btn-warning mt-4" @click="showModal">Crear Reporte</button>
-
     </div> 
-
 
     <modal-component ref="ModalComponent"  v-on:refresh-list="listReport"/>
   </div>
@@ -71,9 +69,11 @@ import 'vue-loading-overlay/dist/vue-loading.css';
             this.isLoading = false;
         })
       },
+
       showModal(){
         this.$refs.ModalComponent.showModal(); 
       },
+
       downloadReport( reportId,reportTitle)
       {
         this.isLoading = true;
@@ -139,6 +139,4 @@ import 'vue-loading-overlay/dist/vue-loading.css';
 .table-custom a {
   color: azure;
 }
-    
-        
 </style>

@@ -35,7 +35,7 @@
                             </div>
                         </div>
                         <div class="d-grid gap-2 col-6 mx-auto mt-3 mb-4">
-                            <button :disabled="isDisabled==true" class=" btn btn-custom btn-warning shadow"  type="submit">Generar reporte</button>
+                            <button :disabled="isDisabled" class=" btn btn-custom btn-warning shadow"  type="submit">Generar reporte</button>
                         </div>
                     </div>
                 </form>
@@ -60,9 +60,9 @@ export default {
             statusModal:false,
             isLoading: false,
         
-            title: null,
-            start_date: null,
-            end_date: null,
+            title: '',
+            start_date: '',
+            end_date: '',
             
             errorMessages:{
                 title: null,
@@ -88,11 +88,11 @@ export default {
     },
     methods: {
         enabledButton(){
-            if(this.title =='' || this.start_date =='' || this.end_date || ''){
-                this.isDisabled = false
+            if(this.title.trim() =='' || this.start_date.trim() =='' || this.end_date.trim() == ''){
+                this.isDisabled = true
             }
             else{
-                this.isDisabled =true
+                this.isDisabled =false
             }
         },
         showModal(){
@@ -152,8 +152,7 @@ export default {
 
             this.title      = '',
             this.start_date = '',
-            this.end_date   = ''
-          
+            this.end_date   = '' 
         }
     },
 
