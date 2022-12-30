@@ -69,32 +69,22 @@ export default {
                 start_date: null,
                 end_date: null
             },
-            isDisabled:true
         }
     },
     components:{
         Loading
     },
-    watch: {
-        title(newValue,oldValue){
-            this.enabledButton()
-        },
-        start_date(newValue,oldValue){
-            this.enabledButton()
-        },
-        end_date(newValue,oldValue){
-            this.enabledButton()
+    computed: {
+        isDisabled() {
+            if(this.title.trim() =='' || this.start_date.trim() =='' || this.end_date.trim() == ''){
+                return true
+            }
+            else
+                return false
+            
         }
     },
     methods: {
-        enabledButton(){
-            if(this.title.trim() =='' || this.start_date.trim() =='' || this.end_date.trim() == ''){
-                this.isDisabled = true
-            }
-            else{
-                this.isDisabled =false
-            }
-        },
         showModal(){
             this.statusModal = true;
         },
